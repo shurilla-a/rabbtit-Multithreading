@@ -33,3 +33,11 @@ type ConfigYaml struct {
 	QueueCount    int    `yaml:"queueCount"`
 	Threading     int    `yaml:"threading"`
 }
+
+// функция парсинга Yaml файла
+func configYamlParsing(YamlconfigFile string) (*ConfigYaml, err) {
+	YamlConfigReaderFile, err := ioutil.ReadFile(YamlconfigFile)
+	if err != nil {
+		errorLoger()
+	}
+}
