@@ -49,3 +49,4 @@ func configYamlParsing(YamlconfigFile string) (*ConfigYaml, error) {
 }
 
 //функция генерации строки
+func RandomString()
