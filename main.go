@@ -47,3 +47,5 @@ func configYamlParsing(YamlconfigFile string) (*ConfigYaml, error) {
 	}
 	return c, nil
 }
+
+//функция генерации строки
