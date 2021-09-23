@@ -35,9 +35,15 @@ type ConfigYaml struct {
 }
 
 // функция парсинга Yaml файла
-func configYamlParsing(YamlconfigFile string) (*ConfigYaml, err) {
+func configYamlParsing(YamlconfigFile string) (*ConfigYaml, error) {
 	YamlConfigReaderFile, err := ioutil.ReadFile(YamlconfigFile)
 	if err != nil {
-		errorLoger()
+		errorLoger(err, "Нет или не открывается Файл")
 	}
+	c := &ConfigYaml{}
+	err = yaml.Unmarshal(YamlConfigReaderFile, c)
+	if err != nil {
+		errorLoger(err, "Немогу распарсить конфиг")
+	}
+	return c, nil
 }
