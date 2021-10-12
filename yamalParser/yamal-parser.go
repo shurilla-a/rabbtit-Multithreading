@@ -16,7 +16,7 @@ type ConfigYaml struct {
 	QueueMessages int    `yaml:"queueMessages"`
 	QueueCount    int    `yaml:"queueCount"`
 	Threading     int    `yaml:"threading"`
-	MessageLength int    `yaml:"messagesLength"`
+	MessageLength int    `yaml:"messageslength"`
 }
 
 // функция парсинга Yaml файла

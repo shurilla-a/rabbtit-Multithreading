@@ -5,9 +5,10 @@ import (
 	"rabbit-Multithreading/logger"
 	"rabbit-Multithreading/randomString"
 	"rabbit-Multithreading/yamalParser"
+	"strconv"
 )
 
-func RabbtiConnect(multithreading int) {
+func RabbtiConnect() {
 
 	configRead, err := yamalParser.ConfigYamlParsing("config.yml")
 	if err != nil {
@@ -26,6 +27,38 @@ func RabbtiConnect(multithreading int) {
 	}
 	defer channel.Close()
 
-	randomString.RandomString(configRead.MessageLength)
+	//		randomString.RandomString(configRead.MessageLength)
+	messageCoutingQueueC := configRead.QueueMessages / configRead.QueueCount
+
+	for i := 0; i < messageCoutingQueueC; i++ {
+		queueName := configRead.QueueName + strconv.Itoa(i)
+		queue, err := channel.QueueDeclare(
+			queueName,
+			true,
+			false,
+			false,
+			false,
+			nil,
+		)
+		if err != nil {
+			logger.ErrorLoger(err, "НЕ могу создать очередь")
+		}
+		for i := 0; i < messageCoutingQueueC; i++ {
+			body := randomString.RandomString(configRead.MessageLength)
+			err = channel.Publish(
+				"",
+				queue.Name,
+				false,
+				false,
+				amqp.Publishing{
+					ContentType: "text/plain",
+					Body:        []byte(body),
+				})
+			if err != nil {
+				logger.ErrorLoger(err, "Не возможно опубликовать сообщение")
+			}
+
+		}
+	}
 
 }
