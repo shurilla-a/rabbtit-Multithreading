@@ -1,11 +1,13 @@
-package logger
+package main
 
-import "rabbit-Multithreading/rabbitSend"
+import (
+	"rabbit-Multithreading/rabbitSend"
+)
 
 // функция логирования ошибок
 
 //функция генерации строки
 //func RandomString()
 func main() {
-	rabbitSend.RabbtiConnect()
+	rabbitSend.RabbtiConnect("config.yml")
 }
