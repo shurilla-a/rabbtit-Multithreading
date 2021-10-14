@@ -1,7 +1,6 @@
 package rabbitSend
 
 import (
-	"fmt"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"rabbit-Multithreading/logger"
 	"rabbit-Multithreading/randomString"
@@ -19,14 +18,30 @@ func RabbtiConnect(fileName string) {
 	connect, err := amqp.Dial(connectUrl)
 	if err != nil {
 		logger.ErrorLoger(err, "НЕ возможно подключиться к RabbitMQ")
+	} else {
+		defer func() {
+			ddd := connect.Close()
+			if err == nil {
+				err = ddd
+			} else {
+				logger.ErrorLoger(err, "Не возможно закрыть connect к RebitMQ")
+			}
+		}()
 	}
-	defer connect.Close()
-
 	channel, err := connect.Channel()
 	if err != nil {
 		logger.ErrorLoger(err, "Не возможно создать Channel для RabbitMQ")
+	} else {
+		//defer channel.Close()
+		defer func() {
+			ddd := channel.Close()
+			if err == nil {
+				err = ddd
+			} else {
+				logger.ErrorLoger(err, "Не возможно закрыть канал")
+			}
+		}()
 	}
-	defer channel.Close()
 
 	//		randomString.RandomString(configRead.MessageLength)
 	messageCoutingQueueC := configRead.QueueMessages / configRead.QueueCount
@@ -55,7 +70,6 @@ func RabbtiConnect(fileName string) {
 					ContentType: "text/plain",
 					Body:        []byte(body),
 				})
-			fmt.Println(body)
 			if err != nil {
 				logger.ErrorLoger(err, "Не возможно опубликовать сообщение")
 			}
