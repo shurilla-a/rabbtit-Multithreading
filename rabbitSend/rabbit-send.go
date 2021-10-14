@@ -20,9 +20,9 @@ func RabbtiConnect(fileName string) {
 		logger.ErrorLoger(err, "НЕ возможно подключиться к RabbitMQ")
 	} else {
 		defer func() {
-			ddd := connect.Close()
+			conn := connect.Close()
 			if err == nil {
-				err = ddd
+				err = conn
 			} else {
 				logger.ErrorLoger(err, "Не возможно закрыть connect к RebitMQ")
 			}
@@ -34,9 +34,9 @@ func RabbtiConnect(fileName string) {
 	} else {
 		//defer channel.Close()
 		defer func() {
-			ddd := channel.Close()
+			chann := channel.Close()
 			if err == nil {
-				err = ddd
+				err = chann
 			} else {
 				logger.ErrorLoger(err, "Не возможно закрыть канал")
 			}
