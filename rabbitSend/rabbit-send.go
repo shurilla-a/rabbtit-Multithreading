@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-func RabbtiConnect(fileName string) {
+func RabbtiConnect(fileName string, exit chan string, num string) {
 
 	configRead, err := yamalParser.ConfigYamlParsing(fileName)
 	if err != nil {
@@ -46,6 +46,7 @@ func RabbtiConnect(fileName string) {
 	//		randomString.RandomString(configRead.MessageLength)
 	messageCoutingQueueC := configRead.QueueMessages / configRead.QueueCount
 
+	//logger.Info(num + ": messageCoutingQueueC - " + strconv.Itoa(messageCoutingQueueC) + ", configRead.QueueCount - " + strconv.Itoa(configRead.QueueCount))
 	for i := 0; i < configRead.QueueCount; i++ {
 		queueName := configRead.QueueName + strconv.Itoa(i)
 		queue, err := channel.QueueDeclare(
@@ -73,8 +74,11 @@ func RabbtiConnect(fileName string) {
 			if err != nil {
 				logger.ErrorLoger(err, "Не возможно опубликовать сообщение")
 			}
+			//else {
+			//	logger.Info(num + ": " + body)
+			//}
 
 		}
 	}
-
+	exit <- "exit"
 }
